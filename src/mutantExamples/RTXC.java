@@ -17,9 +17,9 @@ public class RTXC {
         } catch(InterruptedException e) {}
     }
 
-    public void rtxcMutant() {
-        try {
-            // Removed wait();
-        } catch(InterruptedException e) {}
-    }
+//    public void rtxcMutant() {
+//        try {
+//            // Removed wait();
+//        } catch(InterruptedException e) {}
+//    }
 }
