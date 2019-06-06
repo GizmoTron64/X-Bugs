@@ -25,6 +25,32 @@ concurrentKeyword
     |   SUBMIT
     ;
 
+rtxcMethod
+    :   waitStatement
+    |   joinCall
+    |   sleepStatement
+    |   notifyStatement
+    |   notifyAllStatement
+    ;
+
+rcxcMethod
+    :   lockCall
+    |   unlockCall
+    |   signalStatement
+    |   signalAllStatement
+    |   acquireCall
+    |   releaseCall
+    |   countDownCall
+    |   submitCall
+    ;
+
+mxtMethod
+    :   waitStatement
+    |   awaitStatement
+    |   sleepStatement
+    |   joinCall
+    ;
+
 concurrentMethod
     :   concurrentKeyword '(' methodParameters? ')'
     ;
@@ -38,11 +64,54 @@ methodParameters
     ;
 
 throwStatement
-	:	'throw' .* ';'
+	:	'throw' .+ ';'
 	;
 
+methodCall
+    :   variable (joinStatement
+    | lockStatement
+    | unlockStatement
+    | acquireStatement
+    | releaseStatement
+    | countDownStatement
+    | submitStatement)
+    ;
+
+joinCall
+    :   variable joinStatement
+    ;
+
+lockCall
+    :   variable lockStatement
+    ;
+
+unlockCall
+    :   variable unlockStatement
+    ;
+
+acquireCall
+    :   variable acquireStatement
+    ;
+
+releaseCall
+    :   variable releaseStatement
+    ;
+
+countDownCall
+    :   variable countDownStatement
+    ;
+
+submitCall
+    :   variable submitStatement
+    ;
+
+
+joinStatement
+    :   JOIN noParamEndStatement
+    ;
+
 synchronizedStatement
-	:	'synchronized' '(' methodParameters ')' block
+	:	SYNCHRONIZED '(' methodParameters ')' block
 	;
 
 waitStatement
@@ -89,6 +158,10 @@ releaseStatement
     :   RELEASE paramEndStatement
     ;
 
+countDownStatement
+    :   COUNTDOWN noParamEndStatement
+    ;
+
 submitStatement
     :   SUBMIT paramEndStatement
     ;
@@ -117,6 +190,10 @@ paramEndStatement
     :   '('methodParameter?');'
     ;
 
+variable
+    :   Letter+ (Letter | UnderscoreOrDollar | Digit)*
+    ;
+
 // Keywords
 SYNCHRONIZED: 'synchronized';
 WAIT: 'wait';
@@ -135,5 +212,17 @@ COUNTDOWN: 'countDown';
 SUBMIT: 'submit';
 THIS: 'this';
 
+Digit
+    :   [0-9]
+    ;
+
+Letter
+    :   [A-Za-z]
+    ;
+
+UnderscoreOrDollar
+    :   '_'
+    |   '$'
+    ;
 
 
