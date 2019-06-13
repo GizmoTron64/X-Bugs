@@ -56,7 +56,7 @@ concurrentMethod
     ;
 
 methodParameter
-    :   .+
+    :   .+?
     ;
 
 methodParameters
@@ -64,7 +64,7 @@ methodParameters
     ;
 
 throwStatement
-	:	'throw' .+ ';'
+	:	'throw' .+? ';'
 	;
 
 methodCall
@@ -175,7 +175,7 @@ blockStatements
     ;
 
 blockStatement
-    :   .+
+    :   .+?
     ;
 
 brackets

@@ -1,17 +1,16 @@
 package mutators;
 
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.ArrayList;
-import java.io.File;
 
 /**
  * public static void main(String[] args) {
@@ -120,26 +119,24 @@ public class FindReplace {
         String content = new String(Files.readAllBytes(path), charset);
         StringBuffer sb = new StringBuffer();
 
-        for(int x=0; x<methods.size(); x++) {
-            String regex = "(" + methods.get(0) + ")(\\((\\w+)\\)\\;)";
-            Pattern p = Pattern.compile(regex);
-            Matcher m = p.matcher(content);
-            System.out.println("for loop " + regex);
+        String regex = "(" + methods.get(0) + ")((\\(\\w+)\\)\\;)";
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(content);
+        System.out.println("for loop " + regex);
 
-            while(m.find()) {
-                if(replacement.equals("")) {
-                    content = content.replaceAll(m.group(), replacement);
-                    System.out.println("while if loop");
-                } else {
-                    String replace = m.group(1) + "(" + m.group(3) + replacement + ");";
-                    //String replace = m.group(3) + replacement;
-                    content = content.replaceAll(m.group(), replace);
-                    //m.appendReplacement(sb, replace);
-                    System.out.println("while else loop " + m.group() + replace);
-                }
+        while(m.find()) {
+            if(replacement.equals("")) {
+                content = content.replaceAll(m.group(), replacement);
+                System.out.println("while if loop");
+            } else {
+                String replace = m.group(3) + replacement;
+                //String replace = m.group(3) + replacement;
+                content = content.replaceAll(m.group(3), replace);
+                //m.appendReplacement(sb, replace);
+                System.out.println("while else loop " + m.group() + replace);
             }
-            //m.appendTail(sb);
         }
+        //m.appendTail(sb);
 
 
         String results = "H:\\My Documents\\Dissertation\\results\\test.txt";
