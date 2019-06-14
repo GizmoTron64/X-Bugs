@@ -3,10 +3,9 @@ package mutators;
 import grammars.JavaGrammarBaseVisitor;
 import grammars.JavaGrammarLexer;
 import grammars.JavaGrammarParser;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.TokenStreamRewriter;
+import org.antlr.v4.runtime.*;
+
+import java.io.IOException;
 
 
 public class Mutator {
@@ -15,26 +14,36 @@ public class Mutator {
     private JavaGrammarLexer lexer;
     private CommonTokenStream tokens;
     private JavaGrammarParser parser;
-    private TokenStreamRewriter rewriter;
+    private RTXCVisitor visitor;
 
-    public Mutator() {
-        charStream = CharStreams.fromString("H:\\My Documents\\Dissertation\\test1.txt");
+    public Mutator() throws IOException {
+        charStream = CharStreams.fromFileName("H:\\My Documents\\Dissertation\\test1.txt");
         lexer = new JavaGrammarLexer(charStream);
         tokens = new CommonTokenStream(lexer);
         parser = new JavaGrammarParser(tokens);
-        rewriter = new TokenStreamRewriter(tokens);
+        visitor = new RTXCVisitor();
     }
+
+    public void visitWait() {
+        visitor.visitWaitStatement(parser.waitStatement());
+    }
+
 
     public static class RTXCVisitor extends JavaGrammarBaseVisitor {
 
+        private TokenStreamRewriter rewriter;
+
+
         @Override
         public Object visitJoinCall(JavaGrammarParser.JoinCallContext ctx) {
-            
             return super.visitJoinCall(ctx);
         }
 
         @Override
         public Object visitWaitStatement(JavaGrammarParser.WaitStatementContext ctx) {
+
+            System.out.println(ctx);
+            //rewriter.delete(ctx.start);
             return super.visitWaitStatement(ctx);
         }
 
