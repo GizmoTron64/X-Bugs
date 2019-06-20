@@ -1,9 +1,10 @@
 package mutators;
 
-import grammars.JavaGrammarBaseVisitor;
 import grammars.JavaGrammarLexer;
 import grammars.JavaGrammarParser;
 import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.tree.ParseTree;
+import visitors.RTXCVisitor;
 
 import java.io.IOException;
 
@@ -14,54 +15,36 @@ public class Mutator {
     private JavaGrammarLexer lexer;
     private CommonTokenStream tokens;
     private JavaGrammarParser parser;
+    private TokenStreamRewriter rewriter;
     private RTXCVisitor visitor;
+    private ParserRuleContext prc;
+    private ParseTree tree;
 
     public Mutator() throws IOException {
-        charStream = CharStreams.fromFileName("H:\\My Documents\\Dissertation\\test1.txt");
+        charStream = CharStreams.fromFileName("C:\\Users\\headl\\OneDrive\\Documents\\Uni\\Dissertation\\test1.txt"); // H:\My Documents\Dissertation\
         lexer = new JavaGrammarLexer(charStream);
         tokens = new CommonTokenStream(lexer);
         parser = new JavaGrammarParser(tokens);
+        rewriter = new TokenStreamRewriter(tokens);
+        parser.setBuildParseTree(true);
+
+        prc = parser.compilationUnit();
+
         visitor = new RTXCVisitor();
-    }
-
-    public void visitWait() {
         visitor.visitWaitStatement(parser.waitStatement());
+
+        System.out.println(prc.getText());
+
+    }
+
+    public void removeWaitStatements() {
+
     }
 
 
-    public static class RTXCVisitor extends JavaGrammarBaseVisitor {
-
-        private TokenStreamRewriter rewriter;
 
 
-        @Override
-        public Object visitJoinCall(JavaGrammarParser.JoinCallContext ctx) {
-            return super.visitJoinCall(ctx);
-        }
 
-        @Override
-        public Object visitWaitStatement(JavaGrammarParser.WaitStatementContext ctx) {
-
-            System.out.println(ctx);
-            //rewriter.delete(ctx.start);
-            return super.visitWaitStatement(ctx);
-        }
-
-        @Override
-        public Object visitNotifyStatement(JavaGrammarParser.NotifyStatementContext ctx) {
-            return super.visitNotifyStatement(ctx);
-        }
-
-        @Override
-        public Object visitNotifyAllStatement(JavaGrammarParser.NotifyAllStatementContext ctx) {
-            return super.visitNotifyAllStatement(ctx);
-        }
-
-        @Override
-        public Object visitSleepStatement(JavaGrammarParser.SleepStatementContext ctx) {
-            return super.visitSleepStatement(ctx);
-        }
-    }
 
 
 }

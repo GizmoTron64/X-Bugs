@@ -119,7 +119,7 @@ public class FindReplace {
         String content = new String(Files.readAllBytes(path), charset);
         StringBuffer sb = new StringBuffer();
 
-        String regex = "(" + methods.get(0) + ")((\\(\\w+)\\)\\;)";
+        String regex = "(" + methods.get(0) + ")((\\(\\w+?)\\)\\;)";
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(content);
         System.out.println("for loop " + regex);
@@ -131,7 +131,7 @@ public class FindReplace {
             } else {
                 String replace = m.group(3) + replacement;
                 //String replace = m.group(3) + replacement;
-                content = content.replaceAll(m.group(3), replace);
+                content = content.replaceAll(m.group(3 ), replace);
                 //m.appendReplacement(sb, replace);
                 System.out.println("while else loop " + m.group() + replace);
             }
@@ -139,7 +139,7 @@ public class FindReplace {
         //m.appendTail(sb);
 
 
-        String results = "H:\\My Documents\\Dissertation\\results\\test.txt";
+        String results = "C:\\Users\\headl\\OneDrive\\Documents\\Uni\\Dissertation\\results.txt";
         Path resultsPath = Paths.get(results);
         Files.write(resultsPath, content.getBytes(charset));
 

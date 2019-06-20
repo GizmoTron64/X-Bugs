@@ -708,6 +708,147 @@ variableInitializerList
  * Productions from §14 (Blocks and Statements)
  */
 
+rtxcMethod
+    :   waitStatement
+    |   joinCall
+    |   sleepStatement
+    |   notifyStatement
+    |   notifyAllStatement
+    ;
+
+rcxcMethod
+    :   lockCall
+    |   unlockCall
+    |   signalStatement
+    |   signalAllStatement
+    |   acquireCall
+    |   releaseCall
+    |   countDownCall
+    |   submitCall
+    ;
+
+mxtMethod
+    :   waitStatement
+    |   awaitStatement
+    |   sleepStatement
+    |   joinCall
+    ;
+
+concurrentMethod
+    :   concurrentKeyword '(' expression? ')'
+    ;
+
+joinCall
+    :   Identifier joinStatement
+    ;
+
+lockCall
+    :   Identifier lockStatement
+    ;
+
+unlockCall
+    :   Identifier unlockStatement
+    ;
+
+acquireCall
+    :   Identifier acquireStatement
+    ;
+
+releaseCall
+    :   Identifier releaseStatement
+    ;
+
+countDownCall
+    :   Identifier countDownStatement
+    ;
+
+submitCall
+    :   Identifier submitStatement
+    ;
+
+
+joinStatement
+    :   JOIN noParamEndStatement
+    ;
+
+waitStatement
+    :   WAIT paramEndStatement
+    ;
+
+notifyStatement
+    :   NOTIFY noParamEndStatement
+    ;
+
+notifyAllStatement
+    :   NOTIFYALL noParamEndStatement
+    ;
+
+awaitStatement
+    :   AWAIT noParamEndStatement
+    ;
+
+signalStatement
+    :   SIGNAL noParamEndStatement
+    ;
+
+signalAllStatement
+    :   SIGNALALL noParamEndStatement
+    ;
+
+sleepStatement
+    :   SLEEP paramEndStatement
+    ;
+
+lockStatement
+    :   LOCK noParamEndStatement
+    ;
+
+unlockStatement
+    :   UNLOCK noParamEndStatement
+    ;
+
+acquireStatement
+    :   ACQUIRE noParamEndStatement
+    ;
+
+releaseStatement
+    :   RELEASE paramEndStatement
+    ;
+
+countDownStatement
+    :   COUNTDOWN noParamEndStatement
+    ;
+
+submitStatement
+    :   SUBMIT paramEndStatement
+    ;
+
+noParamEndStatement
+    :  '();'
+    ;
+
+paramEndStatement
+    :   '('expression?');'
+    ;
+
+concurrentKeyword
+    :   SYNCHRONIZED
+    |   WAIT
+    |   AWAIT
+    |   JOIN
+    |   SLEEP
+    |   NOTIFY
+    |   NOTIFYALL
+    |   LOCK
+    |   UNLOCK
+    |   SIGNAL
+    |   SIGNALALL
+    |   ACQUIRE
+    |   RELEASE
+    |   COUNTDOWN
+    |   SUBMIT
+    ;
+
 block
 	:	'{' blockStatements? '}'
 	;
@@ -1337,146 +1478,9 @@ castExpression
 	|	'(' referenceType additionalBound* ')' lambdaExpression
 	;
 /////////////////////////////////////////////
-concurrentKeyword
-    :   SYNCHRONIZED
-    |   WAIT
-    |   AWAIT
-    |   JOIN
-    |   SLEEP
-    |   NOTIFY
-    |   NOTIFYALL
-    |   LOCK
-    |   UNLOCK
-    |   SIGNAL
-    |   SIGNALALL
-    |   ACQUIRE
-    |   RELEASE
-    |   COUNTDOWN
-    |   SUBMIT
-    ;
-
-rtxcMethod
-    :   waitStatement
-    |   joinCall
-    |   sleepStatement
-    |   notifyStatement
-    |   notifyAllStatement
-    ;
-
-rcxcMethod
-    :   lockCall
-    |   unlockCall
-    |   signalStatement
-    |   signalAllStatement
-    |   acquireCall
-    |   releaseCall
-    |   countDownCall
-    |   submitCall
-    ;
-
-mxtMethod
-    :   waitStatement
-    |   awaitStatement
-    |   sleepStatement
-    |   joinCall
-    ;
-
-concurrentMethod
-    :   concurrentKeyword '(' expression? ')'
-    ;
-
-joinCall
-    :   Identifier joinStatement
-    ;
-
-lockCall
-    :   Identifier lockStatement
-    ;
-
-unlockCall
-    :   Identifier unlockStatement
-    ;
-
-acquireCall
-    :   Identifier acquireStatement
-    ;
-
-releaseCall
-    :   Identifier releaseStatement
-    ;
-
-countDownCall
-    :   Identifier countDownStatement
-    ;
-
-submitCall
-    :   Identifier submitStatement
-    ;
 
 
-joinStatement
-    :   JOIN noParamEndStatement
-    ;
 
-waitStatement
-    :   WAIT paramEndStatement
-    ;
-
-notifyStatement
-    :   NOTIFY noParamEndStatement
-    ;
-
-notifyAllStatement
-    :   NOTIFYALL noParamEndStatement
-    ;
-
-awaitStatement
-    :   AWAIT noParamEndStatement
-    ;
-
-signalStatement
-    :   SIGNAL noParamEndStatement
-    ;
-
-signalAllStatement
-    :   SIGNALALL noParamEndStatement
-    ;
-
-sleepStatement
-    :   SLEEP paramEndStatement
-    ;
-
-lockStatement
-    :   LOCK noParamEndStatement
-    ;
-
-unlockStatement
-    :   UNLOCK noParamEndStatement
-    ;
-
-acquireStatement
-    :   ACQUIRE noParamEndStatement
-    ;
-
-releaseStatement
-    :   RELEASE paramEndStatement
-    ;
-
-countDownStatement
-    :   COUNTDOWN noParamEndStatement
-    ;
-
-submitStatement
-    :   SUBMIT paramEndStatement
-    ;
-
-noParamEndStatement
-    :  '();'
-    ;
-
-paramEndStatement
-    :   '('expression?');'
-    ;
 
 /////////////////////////////////////////////////////////////
 
