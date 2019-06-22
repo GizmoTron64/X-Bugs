@@ -12,7 +12,7 @@ public class RTXCVisitor extends JavaGrammarBaseVisitor {
 
     @Override
     public Object visitWaitStatement(JavaGrammarParser.WaitStatementContext ctx) {
-        return super.visitWaitStatement(ctx);
+        return ctx.getText();
     }
 
     @Override

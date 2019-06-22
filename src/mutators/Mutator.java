@@ -4,6 +4,8 @@ import grammars.JavaGrammarLexer;
 import grammars.JavaGrammarParser;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import visitors.RTXCListener;
 import visitors.RTXCVisitor;
 
 import java.io.IOException;
@@ -21,29 +23,22 @@ public class Mutator {
     private ParseTree tree;
 
     public Mutator() throws IOException {
-        charStream = CharStreams.fromFileName("C:\\Users\\headl\\OneDrive\\Documents\\Uni\\Dissertation\\test1.txt"); // H:\My Documents\Dissertation\
+        charStream = CharStreams.fromFileName("C:\\Users\\headl\\OneDrive\\Documents\\Uni\\Dissertation\\waitStatement.txt"); // H:\My Documents\Dissertation\
         lexer = new JavaGrammarLexer(charStream);
         tokens = new CommonTokenStream(lexer);
         parser = new JavaGrammarParser(tokens);
-        rewriter = new TokenStreamRewriter(tokens);
-        parser.setBuildParseTree(true);
+        tree = parser.compilationUnit();
+        ParseTreeWalker walker = new ParseTreeWalker();
 
-        prc = parser.compilationUnit();
+            //System.out.println(tree);
+        //System.out.println(tree.toStringTree(parser));
+        //System.out.println(tree.getText());
+        walker.walk(new RTXCListener(parser), tree);
+        System.out.println(tree.toStringTree(parser));
 
-        visitor = new RTXCVisitor();
-        visitor.visitWaitStatement(parser.waitStatement());
-
-        System.out.println(prc.getText());
-
-    }
-
-    public void removeWaitStatements() {
+        System.out.println(tree.getText());
 
     }
-
-
-
-
 
 
 
