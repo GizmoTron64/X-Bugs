@@ -5,7 +5,6 @@ import grammars.JavaGrammarParser;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import visitors.RTXCListener;
 import visitors.RTXCVisitor;
 
 import java.io.IOException;
@@ -23,20 +22,24 @@ public class Mutator {
     private ParseTree tree;
 
     public Mutator() throws IOException {
-        charStream = CharStreams.fromFileName("C:\\Users\\headl\\OneDrive\\Documents\\Uni\\Dissertation\\waitStatement.txt"); // H:\My Documents\Dissertation\
+        charStream = CharStreams.fromFileName("H:\\My Documents\\Dissertation\\wait.txt"); //  "C:\\Users\\headl\\OneDrive\\Documents\\Uni\\Dissertation\\waitStatement.txt"
         lexer = new JavaGrammarLexer(charStream);
         tokens = new CommonTokenStream(lexer);
+        tokens.fill();
         parser = new JavaGrammarParser(tokens);
-        tree = parser.compilationUnit();
+        tree = parser.waitStatement();
+        rewriter = new TokenStreamRewriter(tokens);
         ParseTreeWalker walker = new ParseTreeWalker();
 
             //System.out.println(tree);
         //System.out.println(tree.toStringTree(parser));
         //System.out.println(tree.getText());
-        walker.walk(new RTXCListener(parser), tree);
+        //walker.walk(new RTXCListener(parser), tree);
+        rewriter.insertAfter(8, "*2");
         System.out.println(tree.toStringTree(parser));
 
-        System.out.println(tree.getText());
+
+        System.out.println(tokens.getText());
 
     }
 

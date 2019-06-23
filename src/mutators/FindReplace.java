@@ -8,61 +8,38 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * public static void main(String[] args) {
- *
- *         String regex = "\\b(\\w+)(\\W\\1\\b)+";
- *         Pattern p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
- *
- *         Scanner in = new Scanner(System.in);
- *         int numSentences = Integer.parseInt(in.nextLine());
- *
- *         while (numSentences-- > 0) {
- *             String input = in.nextLine();
- *
- *             Matcher m = p.matcher(input);
- *
- *             // Check for subsequences of input that match the compiled pattern
- *             while (m.find()) {
- *                 input = input.replaceAll(m.group(), m.group(1));
- *             }
- *
- *             // Prints the modified sentence.
- *             System.out.println(input);
- *         }
- *
- *         in.close();
- *     }
- * }
- */
-
 public class FindReplace {
     private ArrayList<String> methods;
-    private String replacement;
+    private String mutator;
     private String output;
     private File inputFile;
+    private Charset charset;
+    private String content;
 
 
-    public FindReplace() {
-         methods = new ArrayList<>();
-         replacement = ""; // Default replacement is a removal
+    public FindReplace(String file) throws IOException{
+         methods = new ArrayList<String>(Arrays.asList("wait", "sleep", "join", "await", "lock", "unlock", "signal",
+                                                        "signalAll", "acquire", "release", "countDown", "submit"));
+         mutator = ""; // Default replacement is a removal
          output = "";
-         inputFile = null;
-         Charset charset = StandardCharsets.UTF_8;
+         inputFile = new File(file);
+         charset = StandardCharsets.UTF_8;
+         Path path = Paths.get(inputFile.getAbsolutePath());
+         content = new String(Files.readAllBytes(path), charset);
 
 
     }
 
-    public String getReplacement() {
-        return replacement;
+    public String getMutator() {
+        return mutator;
     }
 
-    public void setReplacement(String r) {
-        replacement = r;
+    public void setMutator(String r) {
+        mutator = r;
     }
 
     public ArrayList<String> getMethods() {
@@ -77,73 +54,34 @@ public class FindReplace {
         methods.add(m);
     }
 
-    public void replace() throws IOException {
-        Charset charset = StandardCharsets.UTF_8;
-        for(int x=0; x<methods.size(); x++) {
-            String regex = "(" + methods.get(x) + "\\((\\w+))\\)";
-            Pattern p = Pattern.compile(regex);
-
-            Scanner in = new Scanner(inputFile);
-            int line = Integer.parseInt((in.nextLine()));
-
-            while(line-- > 0) {
-                String input = in.nextLine();
-                Matcher m = p.matcher(input);
-
-                while(m.find()) {
-                    String replace = m.group(1) + replacement;
-                    input = input.replaceAll(m.group(1), replace);
-                    output += "\n" + input;
-                }
-
-            /**
-             * Path path = Paths.get("test.txt");
-             * Charset charset = StandardCharsets.UTF_8;
-             *
-             * String content = new String(Files.readAllBytes(path), charset);
-             * content = content.replaceAll("foo", "bar");
-             * Files.write(path, content.getBytes(charset));
-             */
-            }
-            String results = "H:\\My Documents\\Dissertation\\results\\test.txt";
-            Path resultsPath = Paths.get(results);
-            Files.write(resultsPath, output.getBytes(charset));
-
-        }
-
-    }
 
     public void rep() throws IOException {
-        Path path = Paths.get(inputFile.getAbsolutePath());
-        Charset charset = StandardCharsets.UTF_8;
-        String content = new String(Files.readAllBytes(path), charset);
-        StringBuffer sb = new StringBuffer();
-
-        String regex = "(" + methods.get(0) + ")((\\(\\w+?)\\)\\;)";
+        String regex = "(wait\\(\\w+)(\\)\\;)";
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(content);
-        System.out.println("for loop " + regex);
 
         while(m.find()) {
-            if(replacement.equals("")) {
-                content = content.replaceAll(m.group(), replacement);
-                System.out.println("while if loop");
+            String replacement;
+            if(mutator != "") {
+                replacement = m.group(1) + mutator + m.group(2); //"wait(" + m.group(1) + replacement;
             } else {
-                String replace = m.group(3) + replacement;
-                //String replace = m.group(3) + replacement;
-                content = content.replaceAll(m.group(3 ), replace);
-                //m.appendReplacement(sb, replace);
-                System.out.println("while else loop " + m.group() + replace);
+                replacement = mutator;
             }
+            content = content.replaceFirst(regex, replacement);
         }
-        //m.appendTail(sb);
 
-
-        String results = "C:\\Users\\headl\\OneDrive\\Documents\\Uni\\Dissertation\\results.txt";
-        Path resultsPath = Paths.get(results);
-        Files.write(resultsPath, content.getBytes(charset));
+        writeToFile();
 
     }
+
+    public void writeToFile() throws IOException{
+        String resultFile = "H:\\My Documents\\Dissertation\\results.txt"; //"C:\\Users\\headl\\OneDrive\\Documents\\Uni\\Dissertation\\results.txt"
+        Path resultsPath = Paths.get(resultFile);
+        Files.write(resultsPath, content.getBytes(charset));
+        Runtime.getRuntime().exec(new String[] {"cmd.exe", "/C", resultFile});
+    }
+
+
 
 
 }

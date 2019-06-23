@@ -1,4 +1,4 @@
-// Generated from C:/Users/headl/IdeaProjects/X-Bugs/src/grammars\JavaGrammar.g4 by ANTLR 4.7.2
+// Generated from S:/jetbrains/IdeaProjects/X-Bugs/src/grammars\JavaGrammar.g4 by ANTLR 4.7.2
 package grammars;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 

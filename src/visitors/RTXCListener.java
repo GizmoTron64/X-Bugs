@@ -14,7 +14,9 @@ public class RTXCListener extends JavaGrammarBaseListener {
     public void enterWaitStatement(JavaGrammarParser.WaitStatementContext ctx) {
         TokenStream tokens = parser.getTokenStream();
         TokenStreamRewriter rewriter = new TokenStreamRewriter(tokens);
+        System.out.println(tokens.getText());
         rewriter.delete(0);
+        System.out.println(tokens.getText());
     }
 
 }
