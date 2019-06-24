@@ -102,28 +102,20 @@ public class FindReplace {
     }
 
     public void replaceMutation() throws IOException {
-        String regex = "(" + method + "\\(\\w*/)(\\)\\;)"; //"(wait\\(\\w*/)(\\)\\;)"; //
+        String regex = "(" + method + "\\(\\w*)(\\)\\;)"; //"(wait\\(\\w*/)(\\)\\;)"; //
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(content);
-        System.out.println("no match");
 
         while(m.find()) {
-            System.out.println("match");
             String replacement;
             if(!mutation.equals("")) {
                 replacement = m.group(1) + mutation + m.group(2); //"wait(" + m.group(1) + replacement;
-                System.out.println("Here");
             } else {
                 replacement = mutation;
-                System.out.println("Here lo");
             }
             content = content.replaceFirst(regex, replacement);
         }
-        System.out.println("Operator: " + operator +
-                            "\nMutation: " + mutation +
-                            "\nMethod: " + method +
-                            "\nRegex: " + regex +
-                            "\nContent: " + content);
+
         writeToFile();
 
     }
@@ -135,6 +127,12 @@ public class FindReplace {
         Runtime.getRuntime().exec(new String[] {"cmd.exe", "/C", resultFile});
     }
 
+    public void printState() {
+        System.out.println("Operator: " + operator +
+                "\nMutation: " + mutation +
+                "\nMethod: " + method +
+                "\nContent: " + content);
+    }
 
 
 
