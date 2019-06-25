@@ -121,10 +121,19 @@ public class FindReplace {
     }
 
     public void writeToFile() throws IOException{
-        String resultFile = "H:\\My Documents\\Dissertation\\results.txt"; //"C:\\Users\\headl\\OneDrive\\Documents\\Uni\\Dissertation\\results.txt"
-        Path resultsPath = Paths.get(resultFile);
-        Files.write(resultsPath, content.getBytes(charset));
-        Runtime.getRuntime().exec(new String[] {"cmd.exe", "/C", resultFile});
+        String filename = "H:\\My Documents\\Dissertation\\samples\\results\\" + operator.toUpperCase() + method; ////"C:\\Users\\headl\\OneDrive\\Documents\\Uni\\Dissertation\\results.txt"
+        String file = filename + ".txt";
+        Path path = Paths.get(file);
+        //File temp = File.createTempFile(file, ".txt", directory);
+        int i = 0;
+        while(Files.exists(path)) {
+            i++;
+            file = filename + i + ".txt";
+            path = Paths.get(file);
+        }
+        Files.write(path, content.getBytes(charset));
+        Runtime.getRuntime().exec(new String[] {"cmd.exe", "/C", file});
+        System.out.println(file);
     }
 
     public void printState() {
