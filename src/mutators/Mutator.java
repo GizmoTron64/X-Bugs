@@ -58,17 +58,36 @@ public class Mutator {
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(content);
 
-        while(m.find()) {
-            String replacement;
-            if(!mutation.equals("")) {
-                replacement = m.group(1) + mutation + m.group(2); //"wait(" + m.group(1) + replacement;
-            } else {
-                replacement = mutation;
+        boolean found = false;
+        int count = countMethodInstances(m);
+        int start = 0;
+        while(m.find(start) && found == false) {
+            if(count-1 == new Random().nextInt(count)) {
+                System.out.println(m.toMatchResult().start() + ":" + m.toMatchResult().end());
+
+                String replacement;
+                if (!mutation.equals("")) {
+                    replacement = m.group(1) + mutation + m.group(2);
+                } else {
+                    replacement = mutation;
+                }
+                content = content.replaceFirst(regex, replacement); // substring(int beginIndex, intEndIndex) returns a substring of a string
+                found = true;
             }
-            content = content.replaceFirst(regex, replacement);
+            System.out.println(count);
+            count--;
+            start = m.end();
         }
 
         writeToFile();
+    }
+
+    public int countMethodInstances(Matcher m) {
+        int count = 0;
+        while(m.find()) {
+            count++;
+        }
+        return count;
     }
 
     /**
