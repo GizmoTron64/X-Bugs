@@ -19,6 +19,7 @@ public class Mutator {
     private String operator;
     private String content;
     private final Charset charset;
+    private final File inputFile;
     private final ArrayList<String> rtxcMethods;
     private final ArrayList<String> rcxcMethods;
     private final ArrayList<String> mxtMethods;
@@ -42,7 +43,7 @@ public class Mutator {
          method = null;
          mutation = null;
          operator = null;
-         File inputFile = new File(file);
+         inputFile = new File(file);
          charset = StandardCharsets.UTF_8;
          Path path = Paths.get(inputFile.getAbsolutePath());
          content = new String(Files.readAllBytes(path), charset);
@@ -54,7 +55,7 @@ public class Mutator {
      * @throws IOException
      */
     public void replaceMutation() throws IOException {
-        String regex = "(" + method + "\\(\\w*)(\\)\\;)"; //"(wait\\(\\w*/)(\\)\\;)"; //
+        String regex = "(\\s\\w*.?" + method + "\\(\\w*)(\\)\\;)"; //"(wait\\(\\w*/)(\\)\\;)"; //
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(content);
 
@@ -62,31 +63,43 @@ public class Mutator {
         int count = countMethodInstances(m);
         int start = 0;
         while(m.find(start) && found == false) {
+            String unmatchedContent = content.substring(0, start);
+            String matched = content.substring(start, content.length());
+
             if(count-1 == new Random().nextInt(count)) {
-                System.out.println(m.toMatchResult().start() + ":" + m.toMatchResult().end());
+                System.out.println("Mutation at: " + m.toMatchResult().start() + ":" + m.toMatchResult().end());
 
                 String replacement;
                 if (!mutation.equals("")) {
-                    replacement = m.group(1) + mutation + m.group(2);
+                    replacement = m.group(1) + mutation + m.group(2) + "//" + method + " was mutated";
                 } else {
-                    replacement = mutation;
+                    replacement = mutation + " //" + method + " was removed";
                 }
-                content = content.replaceFirst(regex, replacement); // substring(int beginIndex, intEndIndex) returns a substring of a string
+
+                matched = matched.replaceFirst(regex, replacement);
+                content = unmatchedContent + matched;
                 found = true;
             }
-            System.out.println(count);
+
             count--;
             start = m.end();
         }
 
-        writeToFile();
+        if(found = true) {
+            writeToFile();
+        }
     }
 
     public int countMethodInstances(Matcher m) {
         int count = 0;
-        while(m.find()) {
+        int start = 0;
+        while(m.find(start)) {
             count++;
+            System.out.println("Match #" + count + ": " + m.toMatchResult().start() + ":" + m.toMatchResult().end());
+            start = m.end();
         }
+
+        System.out.println("Matches found: " + count);
         return count;
     }
 
@@ -96,20 +109,22 @@ public class Mutator {
      * @throws IOException
      */
     public void writeToFile() throws IOException{
+
         String filename = "H:\\My Documents\\Dissertation\\samples\\results\\" + operator.toUpperCase() + method; ////"C:\\Users\\headl\\OneDrive\\Documents\\Uni\\Dissertation\\results.txt"
-        String file = filename + ".txt";
+
+        String file = filename + inputFile.getName();
         Path path = Paths.get(file);
 
         int i = 0;
         while(Files.exists(path)) {
             i++;
-            file = filename + i + ".txt";
+            file = filename + i + inputFile.getName();
             path = Paths.get(file);
         }
 
         Files.write(path, content.getBytes(charset));
         Runtime.getRuntime().exec(new String[] {"cmd.exe", "/C", file});
-        System.out.println(file);
+        System.out.println("File saved at: " + file);
     }
 
     /**
