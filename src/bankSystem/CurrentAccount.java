@@ -3,7 +3,7 @@ import java.util.concurrent.TimeUnit;
 
 public class CurrentAccount extends Account {
 
-	private double overdraftLimit;
+	private final double overdraftLimit;
 
 	public CurrentAccount(String name, double initialBalance) {
 		super(name, initialBalance);
@@ -38,5 +38,9 @@ public class CurrentAccount extends Account {
 
 	public void setUpStandingOrder(double amount, Account recipient, int frequency) {
 
+	}
+
+	public double getOverdraftLimit() {
+		return overdraftLimit;
 	}
 }

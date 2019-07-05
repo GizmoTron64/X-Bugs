@@ -33,7 +33,7 @@ public class Mutator {
      * @param file
      * @throws IOException
      */
-    public Mutator(String file) throws IOException{
+    public Mutator(File file) throws IOException{
          operatorList = new ArrayList<String>(Arrays.asList("rtxc", "rcxc", "mxt", "msp", "esp"));
          rtxcMethods = new ArrayList<String>(Arrays.asList("wait", "join", "sleep", "notify", "notifyAll"));
          rcxcMethods = new ArrayList<String>(Arrays.asList("lock", "unlock", "signal", "signalAll", "acquire", "release", "countDown", "submit"));
@@ -43,7 +43,7 @@ public class Mutator {
          method = null;
          mutation = null;
          operator = null;
-         inputFile = new File(file);
+         inputFile = file;
          charset = StandardCharsets.UTF_8;
          Path path = Paths.get(inputFile.getAbsolutePath());
          content = new String(Files.readAllBytes(path), charset);

@@ -1,5 +1,7 @@
 package mutators;
 
+import javax.swing.*;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -14,7 +16,10 @@ import java.io.IOException;
 public class MutatorRunnable {
 
     public static void main(String[] args) throws IOException {
-        Mutator fr = new Mutator("H:\\My Documents\\Dissertation\\samples\\account.java");
+        JFileChooser chooser = new JFileChooser();
+        chooser.showOpenDialog(null);
+        File file = chooser.getSelectedFile();
+        Mutator fr = new Mutator(file);
         fr.setOperator("rcxc", "lock");
         fr.replaceMutation();
     }
