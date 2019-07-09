@@ -20,6 +20,7 @@ public class Mutator {
     private String content;
     private final Charset charset;
     private final File inputFile;
+    private File resultFile;
     private final ArrayList<String> rtxcMethods;
     private final ArrayList<String> rcxcMethods;
     private final ArrayList<String> mxtMethods;
@@ -55,7 +56,7 @@ public class Mutator {
      * @throws IOException
      */
     public void replaceMutation() throws IOException {
-        String regex = "(\\s\\w*.?" + method + "\\(\\w*)(\\)\\;)"; //"(wait\\(\\w*/)(\\)\\;)"; //
+        String regex = "(\\s*\\w*.?" + method + "\\(\\w*)(\\)\\;)";
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(content);
 
@@ -110,8 +111,7 @@ public class Mutator {
      */
     public void writeToFile() throws IOException{
 
-        String filename = "H:\\My Documents\\Dissertation\\samples\\results\\" + operator.toUpperCase() + method; ////"C:\\Users\\headl\\OneDrive\\Documents\\Uni\\Dissertation\\results.txt"
-
+        String filename = "H:\\My Documents\\Dissertation\\samples\\results\\" + operator.toUpperCase() + method;
         String file = filename + inputFile.getName();
         Path path = Paths.get(file);
 
@@ -123,6 +123,7 @@ public class Mutator {
         }
 
         Files.write(path, content.getBytes(charset));
+        resultFile = new File(file);
         Runtime.getRuntime().exec(new String[] {"cmd.exe", "/C", file});
         System.out.println("File saved at: " + file);
     }
@@ -258,6 +259,14 @@ public class Mutator {
      */
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public File getInputFile() {
+        return inputFile;
+    }
+
+    public File getResultFile() {
+        return resultFile;
     }
 
     /**
