@@ -36,10 +36,6 @@ public class CurrentAccount extends Account {
 		}
 	}
 
-	public void setUpStandingOrder(double amount, Account recipient, int frequency) {
-
-	}
-
 	public double getOverdraftLimit() {
 		return overdraftLimit;
 	}

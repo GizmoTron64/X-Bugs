@@ -36,7 +36,7 @@ public class Mutator {
      */
     public Mutator(File file) throws IOException{
          operatorList = new ArrayList<String>(Arrays.asList("rtxc", "rcxc", "mxt", "msp", "esp"));
-         rtxcMethods = new ArrayList<String>(Arrays.asList("wait", "join", "sleep", "notify", "notifyAll"));
+         rtxcMethods = new ArrayList<String>(Arrays.asList("wait", "join", "sleep", "notify", "notifyAll", "interrupt", "await"));
          rcxcMethods = new ArrayList<String>(Arrays.asList("lock", "unlock", "signal", "signalAll", "acquire", "release", "countDown", "submit"));
          mxtMethods = new ArrayList<String>(Arrays.asList("wait", "sleep", "join", "await"));
          mspMethods = new ArrayList<String>(Arrays.asList("synchronized"));
@@ -56,7 +56,7 @@ public class Mutator {
      * @throws IOException
      */
     public void replaceMutation() throws IOException {
-        String regex = "(\\s*\\w*.?" + method + "\\(\\w*)(\\)\\;)";
+        String regex = "(\\s*\\w*.?" + method + "\\()(\\w*)(.*\\)\\;)";
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(content);
 
@@ -70,23 +70,33 @@ public class Mutator {
             if(count-1 == new Random().nextInt(count)) {
                 System.out.println("Mutation at: " + m.toMatchResult().start() + ":" + m.toMatchResult().end());
 
+
                 String replacement;
-                if (!mutation.equals("")) {
-                    replacement = m.group(1) + mutation + m.group(2) + "//" + method + " was mutated";
-                } else {
+                if (operator.equals("mxt")) {
+                    replacement = m.group(1) + m.group(2) + mutation + m.group(3) + " //" + method + " was mutated";
+                    found = true;
+                } else if (operator.equals("rtxc") | operator.equals("rcxc")){
                     replacement = mutation + " //" + method + " was removed";
+                    found = true;
+                } else if (operator.equals("msp")) {
+                    replacement = m.group(1) + mutation + m.group(3) + " //" + method + " was mutated";
+                    found = true;
+                } else {
+                    replacement = "Not found";
                 }
 
-                matched = matched.replaceFirst(regex, replacement);
-                content = unmatchedContent + matched;
-                found = true;
+                if (found) {
+                    matched = matched.replaceFirst(regex, replacement);
+                    content = unmatchedContent + matched;
+
+                }
             }
 
             count--;
             start = m.end();
         }
 
-        if(found = true) {
+        if(found) {
             writeToFile();
         }
     }
@@ -210,6 +220,7 @@ public class Mutator {
                 setMethod(mxtMethods);
                 return mxtMethods;
             } else if(operator.equals("msp")) {
+                mutation = "this";
                 setMethod(mspMethods);
                 return mspMethods;
             } else if(operator.equals("esp")) {

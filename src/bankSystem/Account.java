@@ -24,7 +24,7 @@ public abstract class Account {
 	}
 
 	public double getBalance() {
-		//System.out.println("Balance of " + name + " is " + balance + ".");
+		System.out.println("Balance of " + name + " is " + balance + ".");
 		return this.balance;
 	}
 

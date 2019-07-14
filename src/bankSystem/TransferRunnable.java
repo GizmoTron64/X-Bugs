@@ -7,7 +7,7 @@ public class TransferRunnable implements Runnable {
 	private Account payee;
 	
 
-	TransferRunnable(Account payee, Account recipient, double transferAmount)
+	public TransferRunnable(Account payee, Account recipient, double transferAmount)
 	{
 		this.payee = payee;	
 		this.recipient = recipient;
@@ -17,19 +17,11 @@ public class TransferRunnable implements Runnable {
 		
 	@Override
 	public void run() {
-
 		try {
-			
 			payee.transferMoney(transferAmount, recipient);
-			//sleep for 10 milliseconds to await interruptions 
 			Thread.sleep(10);
-			
 		} catch (InterruptedException e) {
-			
 			e.printStackTrace();
 		}
-		
-		
-		
 	}
 }

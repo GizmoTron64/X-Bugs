@@ -20,7 +20,7 @@ public class MutatorRunnable {
         chooser.showOpenDialog(null);
         File file = chooser.getSelectedFile();
         Mutator fr = new Mutator(file);
-        fr.setOperator("rtxc", "wait");
+        fr.setOperator("mxt", "await");
         fr.replaceMutation();
     }
 }

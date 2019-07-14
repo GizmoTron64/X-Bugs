@@ -1,4 +1,6 @@
-package mutators;
+package JUnitTests;
+
+import mutators.Mutator;
 
 import java.io.File;
 import java.io.IOException;
