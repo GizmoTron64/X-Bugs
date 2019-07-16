@@ -16,7 +16,7 @@ public abstract class Account {
 		this.name = name;
 		System.out.println("Initial balance of " + name + " is " + balance + ".");
 		balanceLock = new ReentrantLock();
- //newCondition was removed
+        fundsAvailableCondition = balanceLock.newCondition();
 	}
 
 	public int getAccountNumber() {
