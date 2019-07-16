@@ -9,7 +9,7 @@ public class CurrentTransferDepositWithdrawTest {
 
     public static void main(String[] args) throws InterruptedException {
         CurrentAccount sender = new CurrentAccount("Account A (Current)", 0);
-        CurrentAccount receiver = new CurrentAccount("Account A (Current)", 0);
+        CurrentAccount receiver = new CurrentAccount("Account B (Current)", 0);
 
         Thread thread1 = new Thread(new WithdrawRunnable(sender, 800));
         Thread thread2 = new Thread(new TransferRunnable(sender, receiver, 100));

@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class LoanAccountJUnitTest {
+public class LoanAccountTest {
     private LoanAccount account;
     private CurrentAccount parent;
 

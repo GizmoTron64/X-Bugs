@@ -18,9 +18,9 @@ public class Mutator {
     private String method;
     private String operator;
     private String content;
+    private File resultFile;
     private final Charset charset;
     private final File inputFile;
-    private File resultFile;
     private final ArrayList<String> rtxcMethods;
     private final ArrayList<String> rcxcMethods;
     private final ArrayList<String> mxtMethods;
@@ -37,7 +37,7 @@ public class Mutator {
     public Mutator(File file) throws IOException{
          operatorList = new ArrayList<String>(Arrays.asList("rtxc", "rcxc", "mxt", "msp", "esp"));
          rtxcMethods = new ArrayList<String>(Arrays.asList("wait", "join", "sleep", "notify", "notifyAll", "interrupt", "await"));
-         rcxcMethods = new ArrayList<String>(Arrays.asList("lock", "unlock", "signal", "signalAll", "acquire", "release", "countDown", "submit"));
+         rcxcMethods = new ArrayList<String>(Arrays.asList("lock", "unlock", "signal", "signalAll", "acquire", "release", "countDown", "submit", "newCondition"));
          mxtMethods = new ArrayList<String>(Arrays.asList("wait", "sleep", "join", "await"));
          mspMethods = new ArrayList<String>(Arrays.asList("synchronized"));
          espMethods = new ArrayList<String>(Arrays.asList("synchronized"));
@@ -56,7 +56,7 @@ public class Mutator {
      * @throws IOException
      */
     public void replaceMutation() throws IOException {
-        String regex = "(\\s*\\w*.?" + method + "\\()(\\w*)(.*\\)\\;)";
+        String regex = "(\\s*.*\\b" + method + "\\()(\\w*)(.*\\)\\;)";
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(content);
 
@@ -73,13 +73,13 @@ public class Mutator {
 
                 String replacement;
                 if (operator.equals("mxt")) {
-                    replacement = m.group(1) + m.group(2) + mutation + m.group(3) + " //" + method + " was mutated";
+                    replacement = m.group(1) + m.group(2) + mutation + m.group(3) + "//" + method + " was mutated";
                     found = true;
                 } else if (operator.equals("rtxc") | operator.equals("rcxc")){
-                    replacement = mutation + " //" + method + " was removed";
+                    replacement = mutation + "\n //" + method + " was removed";
                     found = true;
                 } else if (operator.equals("msp")) {
-                    replacement = m.group(1) + mutation + m.group(3) + " //" + method + " was mutated";
+                    replacement = m.group(1) + mutation + m.group(3) + "//" + method + " was mutated";
                     found = true;
                 } else {
                     replacement = "Not found";
@@ -97,7 +97,10 @@ public class Mutator {
         }
 
         if(found) {
-            writeToFile();
+            String projectFile = "S:\\jetbrains\\IdeaProjects\\X-Bugs\\src\\bankSystem\\" + inputFile.getName();
+            String results = "H:\\My Documents\\Dissertation\\samples\\results\\" + operator.toUpperCase() + method;
+            writeToFile(projectFile);
+            saveResults(results);
         }
     }
 
@@ -119,23 +122,25 @@ public class Mutator {
      *
      * @throws IOException
      */
-    public void writeToFile() throws IOException{
-
-        String filename = "H:\\My Documents\\Dissertation\\samples\\results\\" + operator.toUpperCase() + method;
-        String file = filename + inputFile.getName();
-        Path path = Paths.get(file);
+    public void saveResults(String input) throws IOException {
+        String filename = input + inputFile.getName();
+        Path path = Paths.get(filename);
 
         int i = 0;
         while(Files.exists(path)) {
             i++;
-            file = filename + i + inputFile.getName();
-            path = Paths.get(file);
+            filename = input + i + inputFile.getName();
+            path = Paths.get(filename);
         }
 
+        writeToFile(filename);
+        resultFile = new File(filename);
+    }
+
+    public void writeToFile(String filename) throws IOException {
+        Path path = Paths.get(filename);
         Files.write(path, content.getBytes(charset));
-        resultFile = new File(file);
-        Runtime.getRuntime().exec(new String[] {"cmd.exe", "/C", file});
-        System.out.println("File saved at: " + file);
+        System.out.println("File saved at: " + filename);
     }
 
     /**

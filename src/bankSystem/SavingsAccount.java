@@ -17,8 +17,11 @@ public class SavingsAccount extends Account {
 		balanceLock.lock();
 		try {
 			while (balance - (amount + fee) < 0) {
-				if (!waiting)
+				if (!waiting) {
 					Thread.currentThread().interrupt();
+				} else {
+					System.out.println("Waiting for funds to become available...");
+				}
 				waiting = fundsAvailableCondition.await(TIMEOUT, TimeUnit.SECONDS);
 			}
 			this.balance -= (amount + fee);

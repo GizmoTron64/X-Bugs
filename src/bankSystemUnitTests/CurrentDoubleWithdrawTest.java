@@ -3,7 +3,7 @@ package bankSystemUnitTests;
 import bankSystem.CurrentAccount;
 import bankSystem.WithdrawRunnable;
 
-public class CurrentDoubleWithdraw {
+public class CurrentDoubleWithdrawTest {
 
     public static void main(String[] args) throws InterruptedException {
         CurrentAccount account = new CurrentAccount("Account A (Current)", 0);

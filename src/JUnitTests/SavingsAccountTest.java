@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class SavingsAccountJUnitTest {
+public class SavingsAccountTest {
     private SavingsAccount account;
 
     @Before

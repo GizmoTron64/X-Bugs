@@ -17,10 +17,11 @@ public class CurrentAccount extends Account {
 		balanceLock.lock();
 		try {
 			while (balance - amount < overdraftLimit) {
-				if (!waiting)
+				if (!waiting) {
 					Thread.currentThread().interrupt();
-				else
+				} else {
 					System.out.println("Waiting for funds to become available...");
+				}
 				waiting = fundsAvailableCondition.await(TIMEOUT, TimeUnit.SECONDS);
 			}
 

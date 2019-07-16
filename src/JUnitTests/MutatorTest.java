@@ -1,6 +1,7 @@
 package JUnitTests;
 
 import mutators.Mutator;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,7 +48,7 @@ public class MutatorTest {
         assertEquals(mutator.countMethodInstances(m), 3);
     }
 
-    @org.junit.Test
+    @Test
     public void writeToFileTest() throws IOException {
         mutator.setContent("test");
         mutator.setOperator("rtxc", "wait");
@@ -61,13 +62,11 @@ public class MutatorTest {
             path = Paths.get(file);
         }
         assertFalse(Files.exists(path));
-        mutator.writeToFile();
+        mutator.saveResults(filename);
         assertTrue(Files.exists(path));
         Charset charset = StandardCharsets.UTF_8;
         String results = new String(Files.readAllBytes(path), charset);
         assertEquals(mutator.getContent(), results);
-
-
     }
 
     @org.junit.Test
@@ -148,7 +147,7 @@ public class MutatorTest {
 
     @org.junit.Test
     public void getRtxcMethodsTest() {
-        ArrayList<String> rtxcList = new ArrayList<String>(Arrays.asList("wait", "join", "sleep", "notify", "notifyAll"));
+        ArrayList<String> rtxcList = new ArrayList<String>(Arrays.asList("wait", "join", "sleep", "notify", "notifyAll", "interrupt", "await"));
         assertEquals(mutator.getRtxcMethods(), rtxcList);
     }
 
