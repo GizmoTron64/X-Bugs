@@ -56,7 +56,7 @@ public class Mutator {
      * @throws IOException
      */
     public void replaceMutation() throws IOException {
-        String regex = "(\\s*.*\\b" + method + "\\()(\\w*)(.*\\)\\;)";
+        String regex = "(\\s*.*\\b" + method + "\\()(\\w*)(.*)";
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(content);
 
@@ -72,14 +72,11 @@ public class Mutator {
 
 
                 String replacement;
-                if (operator.equals("mxt")) {
-                    replacement = m.group(1) + m.group(2) + mutation + m.group(3) + "//" + method + " was mutated";
-                    found = true;
-                } else if (operator.equals("rtxc") | operator.equals("rcxc")){
+               if (operator.equals("rtxc") | operator.equals("rcxc")){
                     replacement = mutation + "\n //" + method + " was removed";
                     found = true;
-                } else if (operator.equals("msp")) {
-                    replacement = m.group(1) + mutation + m.group(3) + "//" + method + " was mutated";
+                } else if (operator.equals("msp") | operator.equals("mxt")) {
+                    replacement = m.group(1) + mutation + m.group(3) + " //" + method + " was modified";
                     found = true;
                 } else {
                     replacement = "Not found";
@@ -97,7 +94,7 @@ public class Mutator {
         }
 
         if(found) {
-            String projectFile = "S:\\jetbrains\\IdeaProjects\\X-Bugs\\src\\bankSystem\\" + inputFile.getName();
+            String projectFile = "S:\\jetbrains\\IdeaProjects\\X-Bugs\\src\\concurrentSystems\\" + inputFile.getName();
             String results = "H:\\My Documents\\Dissertation\\samples\\results\\" + operator.toUpperCase() + method;
             writeToFile(projectFile);
             saveResults(results);
@@ -221,7 +218,7 @@ public class Mutator {
                 setMethod(rcxcMethods);
                 return rcxcMethods;
             } else if(operator.equals("mxt")) {
-                mutation = "*2";
+                mutation = "0";
                 setMethod(mxtMethods);
                 return mxtMethods;
             } else if(operator.equals("msp")) {

@@ -19,9 +19,9 @@ public class CurrentTransferDepositWithdrawTest {
         thread2.start();
         thread3.start();
 
-        thread1.join();
-        thread2.join();
-        thread3.join();
+        thread1.join(3000);
+        thread2.join(3000);
+        thread3.join(3000);
         assert sender.getBalance() == 100 : "Incorrect Balance. Balance: " + sender.getBalance() + " Expected Balance: 100.00";
         assert receiver.getBalance() == 100 : "Incorrect Balance. Balance: " + receiver.getBalance() + " Expected Balance: 100.00";
     }

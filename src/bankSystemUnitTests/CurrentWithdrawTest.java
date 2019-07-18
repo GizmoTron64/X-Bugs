@@ -15,8 +15,8 @@ public class CurrentWithdrawTest {
 		thread1.start();
 		thread2.start();
 
-		thread1.join();
-		thread2.join();
+		thread1.join(3000);
+		thread2.join(3000);
 		assert account.getBalance() == 200: "Incorrect Balance. Balance: " + account.getBalance() + " Expected Balance: 200.00";
 	}
 	
