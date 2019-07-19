@@ -16,7 +16,7 @@ public class Incrementer {
             System.out.println(count);
 
             try {
-                Thread.sleep(500);
+                Thread.sleep(750);
             } catch (Exception e) {
                 System.out.println("Thread Interrupted");
             }
@@ -30,17 +30,30 @@ public class Incrementer {
     }
 
     public void multiplier(int mult) {
-        try {
-            Thread.sleep(500);
-        } catch (Exception e) {
-            System.out.println("Thread Interrupted");
-        }
         count *= mult;
         System.out.println(count);
     }
 
+    public void incrementInterrupt(int inc) {
+        lock.lock();
+        Thread.currentThread().interrupt();
+
+        if(Thread.interrupted()) {
+            increment(inc);
+        } else {
+            count = -1;
+            System.out.println(count);
+        }
+
+        lock.unlock();
+    }
+
     public int getCount() {
         return count;
+    }
+
+    public void setCount(int i) {
+        count = i;
     }
 }
 
