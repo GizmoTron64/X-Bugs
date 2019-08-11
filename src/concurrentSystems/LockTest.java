@@ -10,8 +10,8 @@ public class LockTest {
         lock2.start();
 
         try {
-            lock1.join(3000);
-            lock2.join(3000);
+            lock1.join(15000);
+            lock2.join(15000);
         } catch(Exception e) {
             System.out.println("Interrupted");
         }

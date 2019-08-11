@@ -70,9 +70,8 @@ public class Mutator {
             if(count-1 == new Random().nextInt(count)) {
                 System.out.println("Mutation at: " + m.toMatchResult().start() + ":" + m.toMatchResult().end());
 
-
                 String replacement;
-               if (operator.equals("rtxc") | operator.equals("rcxc")){
+                if (operator.equals("rtxc") | operator.equals("rcxc")){
                     replacement = mutation + "\n //" + method + " was removed";
                     found = true;
                 } else if (operator.equals("msp") | operator.equals("mxt")) {
@@ -85,8 +84,8 @@ public class Mutator {
                 if (found) {
                     matched = matched.replaceFirst(regex, replacement);
                     content = unmatchedContent + matched;
-
                 }
+
             }
 
             count--;
@@ -335,8 +334,6 @@ public class Mutator {
     public ArrayList<String> getOperatorList() {
         return operatorList;
     }
-
-
 
 
 }

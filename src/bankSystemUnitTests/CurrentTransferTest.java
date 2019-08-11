@@ -4,7 +4,7 @@ import bankSystem.CurrentAccount;
 import bankSystem.DepositRunnable;
 import bankSystem.TransferRunnable;
 
-public class CurrentTransferDepositTest {
+public class CurrentTransferTest {
     public static void main(String[] args) throws InterruptedException {
         CurrentAccount sender = new CurrentAccount("Current Account Sender", 0);
         CurrentAccount receiver = new CurrentAccount("Current Account Receiver", 0);

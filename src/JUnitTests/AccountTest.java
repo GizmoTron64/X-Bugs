@@ -32,7 +32,7 @@ public class AccountTest {
     }
 
     @Test
-    public void transferMoney() {
+    public void transferMoneyValid() {
         Account sender = new CurrentAccount("recipient", 15);
         sender.transferMoney(10, account);
         assertEquals(5, sender.getBalance(), 0.009);
@@ -40,6 +40,14 @@ public class AccountTest {
     }
 
     @Test
+    public void transferMoneyInvalid() {
+        Account sender = new CurrentAccount("recipient", -45);
+        sender.transferMoney(10, account);
+        assertEquals(-45, sender.getBalance(), 0.009);
+        assertEquals(0, account.getBalance(), 0.009);
+    }
+
+        @Test
     public void getName() {
         assertEquals("acc", account.getName());
     }
